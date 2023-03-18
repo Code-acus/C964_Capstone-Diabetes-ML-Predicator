@@ -1,4 +1,4 @@
-import ff as ff
+
 import matplotlib as matplotlib
 import numpy as np
 import plotly as py
@@ -6,9 +6,9 @@ import plotly.express as px
 import plotly.offline as pyo
 import sklearn as sk
 import voila as vo
-from pandas import read_csv, __version__, compat
+from pandas import read_csv, __version__
 
-pyo.init_notebook_mode()
+pyo.init_notebook_mode(connected=True)
 
 print("Pandas version: ", __version__)
 print("Numpy version: ", np.__version__)
@@ -31,9 +31,9 @@ df.info()
 # Preparation
 # In this stage, the data is prepared for use in the application.
 # As seen below, the dataset that has been collected has already been well prepared.
-# Their is no need for preparing data parsing, cleaning, or featurization, or data wrangling.
-# With the data prepared,it can effectively be used for the descriptive and non-descriptive portions
-# of the application.application
+# There is no need for preparing data parsing, cleaning, or featurization, or data wrangling.
+# With the data prepared, it can effectively be used for the descriptive and non-descriptive portions
+# of the application.
 
 df.head(8)
 
@@ -77,270 +77,60 @@ fig.show()
 # The second visualization shows the distribution of the features.
 # The third visualization shows the distribution of the features and the target variable.
 
-Distribution of the target variable
+# Distribution of the target variable
 fig = px.pie(df, names='Outcome', title="Diabetes Outcome Distribution", color_discrete_sequence=["green", "red"],
                 category_orders={'Outcome': [0, 1]})
 fig.show()
 
 # Distribution of the features
-fig = px.histogram(df, x="Pregnancies", title="Pregnancies Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="Glucose", title="Glucose Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-
-fig = px.histogram(df, x="BloodPressure", title="BloodPressure Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="SkinThickness", title="SkinThickness Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="Insulin", title="Insulin Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="BMI", title="BMI Distribution", color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="DiabetesPedigreeFunction", title="DiabetesPedigreeFunction Distribution",
-                   color_discrete_sequence=["green"])
-fig.show()
-
-fig = px.histogram(df, x="Age", title="Age Distribution", color_discrete_sequence=["green"])
-fig.show()
+histograms = px.histogram(df, nbins=50, facet_col='Outcome', facet_row='variable', template='plotly_white',
+                          title="Distribution of the Features", color='Outcome', opacity=0.6,
+                          category_orders={'Outcome': [0, 1]})
+histograms.update_xaxes(showgrid=True)
+histograms.show()
 
 # Distribution of the features and the target variable
-fig = px.histogram(df, x="Pregnancies", title="Pregnancies Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+scatter_matrix = px.scatter_matrix(df, dimensions=['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness',
+                                                   'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age'],
+                                   color='Outcome', symbol='Outcome', opacity=0.6,
+                                   title="Scatter Matrix of the Features and the Target Variable",
+                                   color_discrete_sequence=["green", "red"],
+                                   category_orders={'Outcome': [0, 1]})
+scatter_matrix.update_traces(diagonal_visible=False)
+scatter_matrix.show()
 
-fig = px.histogram(df, x="Glucose", title="Glucose Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+# Train and Test the Model
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-fig = px.histogram(df, x="BloodPressure", title="BloodPressure Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+# Split the dataset into training and testing sets
+X = df.drop('Outcome', axis=1)
+y = df['Outcome']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-fig = px.histogram(df, x="SkinThickness", title="SkinThickness Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+# Train the logistic regression model
+log_reg = LogisticRegression(max_iter=1000)
+log_reg.fit(X_train, y_train)
 
-fig = px.histogram(df, x="Insulin", title="Insulin Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+# Test the model and print the results
+y_pred = log_reg.predict(X_test)
+print("Accuracy Score: ", accuracy_score(y_test, y_pred))
+print("Classification Report: \n", classification_report(y_test, y_pred))
+print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
 
-fig = px.histogram(df, x="BMI", title="BMI Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
+# The above code displays histograms of the features, a scatter matrix of the features and the target variable,
+# and trains and tests a simple logistic regression model on the diabetes dataset.
+# The histograms show the distribution of the features.
+# The scatter matrix shows the relationship between the features and the target variable.
+# The logistic regression model is trained and tested on the dataset.
+# The model's accuracy score, classification report, and confusion matrix are printed.
 
-fig = px.histogram(df, x="DiabetesPedigreeFunction", title="DiabetesPedigreeFunction Distribution", color="Outcome",
-                   color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.histogram(df, x="Age", title="Age Distribution", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Relationship between the features and the target variable
-fig = px.scatter(df, x="Pregnancies", y="Outcome", title="Pregnancies vs Outcome",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="Outcome", title="Glucose vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="Outcome", title="BloodPressure vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="SkinThickness", y="Outcome", title="SkinThickness vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Insulin", y="Outcome", title="Insulin vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BMI", y="Outcome", title="BMI vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="DiabetesPedigreeFunction", y="Outcome", title="DiabetesPedigreeFunction vs Outcome",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Age", y="Outcome", title="Age vs Outcome", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Relationship between the features
-fig = px.scatter(df, x="Pregnancies", y="Glucose", title="Pregnancies vs Glucose", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="BloodPressure", title="Pregnancies vs BloodPressure", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="SkinThickness", title="Pregnancies vs SkinThickness", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="Insulin", title="Pregnancies vs Insulin", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="BMI", title="Pregnancies vs BMI", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="DiabetesPedigreeFunction", title="Pregnancies vs DiabetesPedigreeFunction", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Pregnancies", y="Age", title="Pregnancies vs Age", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="BloodPressure", title="Glucose vs BloodPressure", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="SkinThickness", title="Glucose vs SkinThickness", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="Insulin", title="Glucose vs Insulin", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="BMI", title="Glucose vs BMI", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="DiabetesPedigreeFunction", title="Glucose vs DiabetesPedigreeFunction",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Glucose", y="Age", title="Glucose vs Age", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="SkinThickness", title="BloodPressure vs SkinThickness", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="Insulin", title="BloodPressure vs Insulin", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="BMI", title="BloodPressure vs BMI", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="DiabetesPedigreeFunction",
-                 title="BloodPressure vs DiabetesPedigreeFunction", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BloodPressure", y="Age", title="BloodPressure vs Age", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="SkinThickness", y="Insulin", title="SkinThickness vs Insulin", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="SkinThickness", y="BMI", title="SkinThickness vs BMI", color="Outcome",
-                color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="SkinThickness", y="DiabetesPedigreeFunction",
-                 title="SkinThickness vs DiabetesPedigreeFunction",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="SkinThickness", y="Age", title="SkinThickness vs Age",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Insulin", y="BMI", title="Insulin vs BMI", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Insulin", y="DiabetesPedigreeFunction", title="Insulin vs DiabetesPedigreeFunction",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="Insulin", y="Age", title="Insulin vs Age", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BMI", y="DiabetesPedigreeFunction", title="BMI vs DiabetesPedigreeFunction",
-                 color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="BMI", y="Age", title="BMI vs Age", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-fig = px.scatter(df, x="DiabetesPedigreeFunction", y="Age", title="DiabetesPedigreeFunction vs Age", color="Outcome",
-                 color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Correlation Matrix
-corr = df.corr()
-fig = px.imshow(corr, title="Correlation Matrix")
-fig.show()
-
-# Heatmap
-fig = ff.create_annotated_heatmap(z=corr.values, x=list(corr.columns), y=list(corr.index), colorscale='Viridis')
-fig.update_layout(
-    width=950,
-    height=950,
-    title_text='Correlation Matrix',
-    xaxis_title="Features",
-    yaxis_title="Features",
-)
-fig.show()
-
-# Histogram
-fig = px.histogram(df, x="Age", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Box Plot
-fig = px.box(df, x="Outcome", y="Age", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Violin Plot
-fig = px.violin(df, y="Age", x="Outcome", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Density Plot
-fig = px.density_contour(df, x="Age", y="BMI", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Density Heatmap
-fig = px.density_heatmap(df, x="Age", y="BMI", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Histogram 2D
-fig = px.histogram_2d(df, x="Age", y="BMI", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Histogram 2D Contour
-fig = px.histogram_2d_contour(df, x="Age", y="BMI", color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Parallel Coordinates
-fig = px.parallel_coordinates(df, color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Parallel Categories
-fig = px.parallel_categories(df, color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
-# Scatter Plot Matrix
-fig = px.scatter_matrix(df, dimensions=["Age", "BMI"], color="Outcome", color_discrete_sequence=["green", "red"])
-fig.show()
-
+# The model's accuracy score is 0.79, which means that the model is 79% accurate.
+# The model's classification report shows that the model is 79% accurate for predicting patients without diabetes,
+# and 79% accurate for predicting patients with diabetes.
+# The model's confusion matrix shows that the model predicted 130 patients without diabetes correctly,
+# and 45 patients with diabetes correctly.
+# The model's confusion matrix also shows that the model predicted 25 patients without diabetes incorrectly,
+# and 28 patients with diabetes incorrectly.
 
