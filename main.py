@@ -1,4 +1,3 @@
-
 import os
 import matplotlib as matplotlib
 import pandas as pd
@@ -17,6 +16,7 @@ import voila as vo
 from sklearn import metrics
 from sklearn import svm
 import plotly.offline as pyo
+
 pyo.init_notebook_mode()
 
 print("Pandas version: ", pd.__version__)
@@ -25,7 +25,6 @@ print("Matplotlib version: ", matplotlib.__version__)
 print("Plotly version: ", py.__version__)
 print("Scikit-learn version: ", sk.__version__)
 print("Voila version: ", vo.__version__)
-
 
 # Data
 # In this section, data is collected and later prepared to support visualizations
@@ -39,4 +38,3 @@ df = pd.read_csv('C:\Users\hrogers\PycharmProjects\C964_Capstone-Diabetes-ML-Pre
 df.info()
 
 # Preparation
-
