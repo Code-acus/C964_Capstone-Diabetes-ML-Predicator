@@ -1,6 +1,5 @@
-import os
+
 import matplotlib as matplotlib
-import pandas as pd
 import numpy as np
 import plotly.express as px
 import ipywidgets as widgets
@@ -16,7 +15,8 @@ import voila as vo
 from sklearn import metrics
 from sklearn import svm
 import plotly.offline as pyo
-
+import pandas as pd
+import plotly.express as px
 pyo.init_notebook_mode()
 
 print("Pandas version: ", pd.__version__)
@@ -44,18 +44,33 @@ df.info()
 # With the data prepared,it can effectively be used for the descriptive and non-descriptive portions
 # of the application.application
 
-df.head(5)
+df.head(8)
 
-# Renaming the columns to match the data
-df.rename({
-    'Pregnancies': 'Pregnancies',
-    'Glucose': 'Glucose',
-    'BloodPressure': 'BloodPressure',
-    'SkinThickness': 'SkinThickness',
-    'Insulin': 'Insulin',
-    'BMI': 'BMI',
-    'DiabetesPedigreeFunction': 'DiabetesPedigreeFunction',
-    'Age': 'Age',
-    'Outcome': 'Outcome'
-}, axis=1, inplace=True)
+# Data wrangling refers to the process of cleaning, structuring, and enriching raw data to make it more suitable
+# for analysis or training machine learning models. Based on the diabetes dataset, that data is already
+# structured and clean.
+#
+# However, it's essential to perform some checks to ensure the dataset is ready for analysis.
+#
+# Here are some steps I am using inspect and prepare my dataset:
+# python
+
+df.isnull().sum()
+
+df.dtypes
+
+df.describe()
+
+df.duplicated().sum()
+
+# Assuming 'df' is your diabetes dataset DataFrame
+fig = px.pie(df, names='Outcome', title="Diabetes Outcome Distribution", color_discrete_sequence=["green", "red"], category_orders={'Outcome': [0, 1]})
+fig.show()
+
+
+
+
+
+
+
 
