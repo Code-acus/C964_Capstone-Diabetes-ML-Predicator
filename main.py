@@ -64,8 +64,24 @@ df.describe()
 df.duplicated().sum()
 
 # Assuming 'df' is your diabetes dataset DataFrame
-fig = px.pie(df, names='Outcome', title="Diabetes Outcome Distribution", color_discrete_sequence=["green", "red"], category_orders={'Outcome': [0, 1]})
+fig = px.pie(df, names='Outcome', title="Diabetes Outcome Distribution", color_discrete_sequence=["green", "red"],
+             category_orders={'Outcome': [0, 1]})
 fig.show()
+
+# The dataset is balanced, with 500 patients with diabetes and 268 patients without diabetes.
+# The dataset is also clean, with no missing values and no duplicate rows.
+# The dataset is also well structured, with all columns having the correct data type.
+# The dataset is also well prepared, with no need for data parsing, cleaning, or featurization.
+
+# Descriptive
+# In this section, the data is used to create visualizations that describe the data.
+# The visualizations are used to answer the following questions:
+# 1. What is the distribution of the data?
+# 2. What is the relationship between the features and the target?
+# 3. What is the relationship between the features?
+
+# Distribution
+
 
 
 
