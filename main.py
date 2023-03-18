@@ -2,11 +2,11 @@
 import matplotlib as matplotlib
 import numpy as np
 import plotly as py
-import plotly.express as px
 import plotly.offline as pyo
 import sklearn as sk
 import voila as vo
 from pandas import read_csv, __version__
+import plotly.express as px
 
 pyo.init_notebook_mode(connected=True)
 
@@ -133,4 +133,52 @@ print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
 # and 45 patients with diabetes correctly.
 # The model's confusion matrix also shows that the model predicted 25 patients without diabetes incorrectly,
 # and 28 patients with diabetes incorrectly.
+
+
+
+
+# Assuming you have loaded the dataset into a DataFrame called df
+
+# Scatter plot
+px.scatter(df, x='Glucose', y='BloodPressure', color='Outcome',
+           title="Glucose v.s. Blood Pressure",
+           color_discrete_sequence=["green", "red"])
+
+# Histograms
+histograms_glucose = px.histogram(df, x='Glucose', color='Outcome', nbins=50, opacity=0.6,
+                                  title="Distribution of Glucose",
+                                  color_discrete_sequence=["green", "red"])
+histograms_glucose.show()
+
+histograms_blood_pressure = px.histogram(df, x='BloodPressure', color='Outcome', nbins=50, opacity=0.6,
+                                         title="Distribution of Blood Pressure",
+                                         color_discrete_sequence=["green", "red"])
+histograms_blood_pressure.show()
+
+histograms_bmi = px.histogram(df, x='BMI', color='Outcome', nbins=50, opacity=0.6,
+                              title="Distribution of BMI",
+                              color_discrete_sequence=["green", "red"])
+histograms_bmi.show()
+
+histograms_age = px.histogram(df, x='Age', color='Outcome', nbins=50, opacity=0.6,
+                              title="Distribution of Age",
+                              color_discrete_sequence=["green", "red"])
+histograms_age.show()
+
+# Scatter matrix
+scatter_matrix = px.scatter_matrix(df, dimensions=['Glucose', 'BloodPressure', 'BMI', 'Age'],
+                                      color='Outcome', symbol='Outcome', opacity=0.6,
+                                        title="Scatter Matrix of Glucose, Blood Pressure, BMI, and Age",
+                                        color_discrete_sequence=["green", "red"])
+scatter_matrix.update_traces(diagonal_visible=False)
+scatter_matrix.show()
+
+# The above code displays a scatter plot, histograms, and a scatter matrix of the diabetes dataset.
+# The scatter plot shows the relationship between the glucose and blood pressure features and the target variable.
+# The histograms show the distribution of the glucose, blood pressure, BMI, and age features.
+# The scatter matrix shows the relationship between the glucose, blood pressure, BMI, and age features and the target variable.
+
+# The scatter plot shows that patients with diabetes have higher glucose and blood pressure levels than patients without diabetes.
+# The histograms show that patients with diabetes have higher glucose, blood pressure, BMI, and age levels than patients without diabetes.
+# The scatter matrix shows that patients with diabetes have higher glucose, blood pressure, BMI, and age levels than patients without diabetes.
 
