@@ -6,10 +6,13 @@ import plotly.express as px
 import plotly.offline as pyo
 import sklearn as sk
 import voila as vo
+from IPython.core.display_functions import display
 from pandas import read_csv, __version__
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
 warnings.filterwarnings(action='ignore', category=UserWarning)
 
@@ -30,18 +33,32 @@ y = df['Outcome']
 
 # Split the data into training and testing subsets:
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-df.info()
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Split the data into training and testing subsets:
 from sklearn.model_selection import train_test_split
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # Train the logistic regression model
 log_reg = LogisticRegression(max_iter=1000)
 log_reg.fit(X_train, y_train)
 
+# Test the model and print the results
+y_pred = log_reg.predict(X_test)
+
+# Print the accuracy score
+print("Accuracy Score: ", accuracy_score(y_test, y_pred))
+
+# Print the classification report
+print("Classification Report: \n", classification_report(y_test, y_pred))
+
+# Print the confusion matrix
+
+print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
+
+df.info()
 
 df.head(8)
 
@@ -79,16 +96,6 @@ scatter_matrix = px.scatter_matrix(df, dimensions=['Pregnancies', 'Glucose', 'Bl
                                    category_orders={'Outcome': [0, 1]})
 scatter_matrix.update_traces(diagonal_visible=False)
 scatter_matrix.show()
-
-# Train the logistic regression model
-log_reg = LogisticRegression(max_iter=1000)
-log_reg.fit(X_train, y_train)
-
-# Test the model and print the results
-y_pred = log_reg.predict(X_test)
-print("Accuracy Score: ", accuracy_score(y_test, y_pred))
-print("Classification Report: \n", classification_report(y_test, y_pred))
-print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
 
 # The above code displays histograms of the features, a scatter matrix of the features and the target variable,
 # and trains and tests a simple logistic regression model on the diabetes dataset.
@@ -205,6 +212,40 @@ def predict_diabetes(model, input_data):
     return prediction[0]
 
 
+from ipywidgets import widgets
+
+# The text boxes where the user can input values.
+pregnancies_widget = widgets.FloatText(description='Pregnancies:', value='0')
+glucose_widget = widgets.FloatText(description='Glucose:', value='0')
+blood_pressure_widget = widgets.FloatText(description='Blood Pressure:', value='0')
+skin_thickness_widget = widgets.FloatText(description='Skin Thickness:', value='0')
+insulin_widget = widgets.FloatText(description='Insulin:', value='0')
+bmi_widget = widgets.FloatText(description='BMI:', value='0')
+diabetes_pedigree_function_widget = widgets.FloatText(description='Diabetes Pedigree Function:', value='0')
+age_widget = widgets.FloatText(description='Age:', value='0')
+
+# A button for the user to get predictions using input values.
+button_predict = widgets.Button(description='Predict')
+button_output = widgets.Label(value='Enter values and press the "Predict" button.')
+
+
+# Defines what happens when you click the button.
+def on_click_predict(b):
+    user_input = [pregnancies_widget.value, glucose_widget.value, blood_pressure_widget.value,
+                  skin_thickness_widget.value,
+                  insulin_widget.value, bmi_widget.value, diabetes_pedigree_function_widget.value, age_widget.value]
+    prediction = predict_diabetes(log_reg, user_input)
+    button_output.value = 'Prediction = ' + str(prediction)
+
+
+button_predict.on_click(on_click_predict)
+
+# Displays the text boxes and button inside a VBox.
+vb = widgets.VBox([pregnancies_widget, glucose_widget, blood_pressure_widget, skin_thickness_widget, insulin_widget,
+                   bmi_widget, diabetes_pedigree_function_widget, age_widget, button_predict, button_output])
+print('\033[1m' + 'Enter values for the following features and make a prediction:' + '\033[0m')
+display(vb)
+
 # Example usage:
 input_data = {
     'Pregnancies': 1,
@@ -218,4 +259,3 @@ input_data = {
 }
 
 print("Prediction result (0 = No Diabetes, 1 = Diabetes):", predict_diabetes(log_reg, input_data))
-
