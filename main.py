@@ -1,16 +1,44 @@
-# This is a sample Python script.
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import os
+import matplotlib as matplotlib
+import pandas as pd
+import numpy as np
+import plotly.express as px
+import ipywidgets as widgets
+import plotly.graph_objs as go
+from ipywidgets import HBox, VBox
+from jedi.api.refactoring import inline
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+import plotly as py
+import sklearn as sk
+import voila as vo
+from sklearn import metrics
+from sklearn import svm
+import plotly.offline as pyo
+pyo.init_notebook_mode()
+
+print("Pandas version: ", pd.__version__)
+print("Numpy version: ", np.__version__)
+print("Matplotlib version: ", matplotlib.__version__)
+print("Plotly version: ", py.__version__)
+print("Scikit-learn version: ", sk.__version__)
+print("Voila version: ", vo.__version__)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+# Data
+# In this section, data is collected and later prepared to support visualizations
+# and the machine learning algorithm.
+#
+# Collection
+# In this stage the application's dataset retrieved from Kaggle is converted from ' \
+# a CSV to a Pandas DataFrame. Information about the DataFrame is then output for inspection.
 
+file_path = os.path.abspath('/Users/harrisonrogers/PycharmProjects/C944_Capstone-Diabetes-ML-Predicator/diabetes_data.csv')
+df = pd.read_csv(file_path)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+df.info()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+# Preparation
+
