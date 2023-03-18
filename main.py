@@ -35,9 +35,7 @@ print("Voila version: ", vo.__version__)
 # In this stage the application's dataset retrieved from Kaggle is converted from ' \
 # a CSV to a Pandas DataFrame. Information about the DataFrame is then output for inspection.
 
-file_path = os.path.abspath('/Users/harrisonrogers/PycharmProjects/C944_Capstone-Diabetes-ML-Predicator/diabetes_data.csv')
-df = pd.read_csv(file_path)
-
+df = pd.read_csv('C:\Users\hrogers\PycharmProjects\C964_Capstone-Diabetes-ML-Predicator\diabetes_data.csv')
 df.info()
 
 # Preparation
