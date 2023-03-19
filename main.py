@@ -104,17 +104,6 @@ scatter_matrix.show()
 # The logistic regression model is trained and tested on the dataset.
 # The model's accuracy score, classification report, and confusion matrix are printed.
 
-# The model's accuracy score is 0.79, which means that the model is 79% accurate.
-# The model's classification report shows that the model is 79% accurate for predicting patients without diabetes,
-# and 79% accurate for predicting patients with diabetes.
-# The model's confusion matrix shows that the model predicted 130 patients without diabetes correctly,
-# and 45 patients with diabetes correctly.
-# The model's confusion matrix also shows that the model predicted 25 patients without diabetes incorrectly,
-# and 28 patients with diabetes incorrectly.
-
-
-# Assuming you have loaded the dataset into a DataFrame called df
-
 # Scatter plot
 px.scatter(df, x='Glucose', y='BloodPressure', color='Outcome',
            title="Glucose v.s. Blood Pressure",
