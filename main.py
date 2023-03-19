@@ -163,24 +163,6 @@ user_input = input_data()
 prediction = log_reg.predict(user_input)
 print("\nPrediction result (0 = No Diabetes, 1 = Diabetes):", prediction[0])
 
-# The above code asks the user to enter values for the features of a patient.
-# The code then uses the trained logistic regression model to predict whether the patient has diabetes or not.
-# The code prints the prediction result.
-
-# Enter the values for the following features:
-# Pregnancies: 1
-# Glucose: 100
-# BloodPressure: 70
-# SkinThickness: 30
-# Insulin: 0
-# BMI: 26
-# DiabetesPedigreeFunction: 0.351
-# Age: 31
-
-# Prediction result (0 = No Diabetes, 1 = Diabetes): 0
-
-# ... The rest of your existing code ...
-
 # Scatter matrix
 scatter_matrix = px.scatter_matrix(df, dimensions=['Glucose', 'BloodPressure', 'BMI', 'Age'],
                                    color='Outcome', symbol='Outcome', opacity=0.6,
@@ -246,5 +228,19 @@ input_data = {
     'DiabetesPedigreeFunction': 0.5,
     'Age': 25
 }
+
+# The above code asks the user to enter values for the features of a patient.
+# The code then uses the trained logistic regression model to predict whether the patient has diabetes or not.
+# The code prints the prediction result.
+
+# Enter the values for the following features:
+# Pregnancies: 1
+# Glucose: 100
+# BloodPressure: 70
+# SkinThickness: 30
+# Insulin: 0
+# BMI: 26
+# DiabetesPedigreeFunction: 0.351
+# Age: 31
 
 print("Prediction result (0 = No Diabetes, 1 = Diabetes):", predict_diabetes(log_reg, input_data))
